@@ -6,6 +6,7 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 import logging
+import os
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -22,11 +23,20 @@ hide_streamlit_style = """
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
+# Define the base and model directory
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_DIR = os.path.join(BASE_DIR, 'saved_models')
+
+# Define model paths
+diabetes_model_path = os.path.join(MODEL_DIR, 'diabetes_model.sav')
+heart_disease_model_path = os.path.join(MODEL_DIR, 'heart_disease_model.sav')
+parkinsons_model_path = os.path.join(MODEL_DIR, 'parkinsons_model.sav')
+
 # Load models
 try:
-    diabetes_model = pickle.load(open('saved_models\diabetes_model.sav', 'rb'))
-    heart_disease_model = pickle.load(open('saved_models\heart_disease_model.sav', 'rb'))
-    parkinsons_model = pickle.load(open('saved_models\parkinsons_model.sav', 'rb'))
+    diabetes_model = pickle.load(open(diabetes_model_path, 'rb'))
+    heart_disease_model = pickle.load(open(heart_disease_model_path, 'rb'))
+    parkinsons_model = pickle.load(open(parkinsons_model_path, 'rb'))
     logger.info("Models loaded successfully.")
 except Exception as e:
     logger.error(f"Error loading models: {e}")
@@ -83,7 +93,6 @@ if selected == 'Diabetes Prediction':
                 st.error("Error during prediction. Please check the logs.")
         else:
             st.warning("Please fill in all fields.")
-
 
 
 # Heart Disease Prediction Page
